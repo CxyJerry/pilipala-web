@@ -1,4 +1,45 @@
-const { defineConfig } = require('@vue/cli-service')
+const path = require('path')
+const copy_plugin = require('copy-webpack-plugin')
+const wasm_file = resolve('node_modules/mediainfo.js/dist/MediaInfoModule.wasm')
+
+function resolve(dir) {
+    return path.join(__dirname, dir)
+}
+
+const {defineConfig} = require('@vue/cli-service')
 module.exports = defineConfig({
-  transpileDependencies: true
+    transpileDependencies: true,
+    lintOnSave: false,
+    publicPath: './',
+    productionSourceMap: false,
+    devServer: {
+        hot: true,
+        host: 'localhost',
+        port: 8888,
+        https: false,
+        proxy: {
+            '/api': {
+                target: process.env.VUE_APP_BASE_URL,
+                changOrigin: true,
+                pathRewrite: {
+                    '^/api': ''
+                }
+            }
+        },
+        client: {
+            overlay: false
+        }
+    },
+    configureWebpack: {
+        plugins: [
+            // npm run dev 时拷贝到dist目录下
+            new copy_plugin({
+                patterns: [{from: wasm_file, to: '.'}]
+            }),
+            // npm run build 时拷贝到dist/js目录下
+            new copy_plugin({
+                patterns: [{from: wasm_file, to: '/js'}]
+            })
+        ]
+    }
 })
