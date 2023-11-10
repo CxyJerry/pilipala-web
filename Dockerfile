@@ -23,7 +23,7 @@ FROM nginx:latest
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 
 # 容器运行时暴露的端口号
-EXPOSE 80
+EXPOSE 8888
 
 # 容器启动时运行Nginx服务
 CMD ["nginx", "-g", "daemon off;"]
