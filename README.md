@@ -51,9 +51,3 @@ npm run serve
 ### 加入社群
 
 <img src="assets/images/qrcode.png" alt="" style="zoom:50%;" />
-
-## Project setup
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
