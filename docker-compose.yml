@@ -1,9 +1,7 @@
 version: '3.3'
 services:
   pilipala-web:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: cxyjerry/pilipala-web:v1.0.0
     ports:
       - "80:8888"
     volumes:
