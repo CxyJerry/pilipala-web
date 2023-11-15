@@ -16,12 +16,15 @@ COPY . .
 # 构建Vue.js项目
 RUN npm run build
 
+RUN ls -l /app
+
 # 使用Nginx镜像作为最终镜像
 FROM nginx:latest
 
 # 将构建好的静态文件复制到Nginx的默认静态文件目录
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 
+RUN ls /usr/share/nginx/html
 # 容器运行时暴露的端口号
 EXPOSE 8888
 
