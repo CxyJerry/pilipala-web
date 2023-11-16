@@ -1,6 +1,6 @@
 <script>
 import Tabs from "@/views/gccenter/views/components/tabs.vue";
-import {content_page, review_page} from "@/api/vod";
+import {review_page} from "@/api/vod";
 import {format_date} from "@/utils/unit";
 import {toRaw} from "vue";
 

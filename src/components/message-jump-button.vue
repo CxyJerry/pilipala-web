@@ -81,8 +81,7 @@
 <script>
 import JumpButton from "@/components/jump-button.vue";
 import {store} from "@/store";
-import {page} from "@/api/msg";
-import {unread_count} from "@/api/msg";
+import {page, unread_count} from "@/api/msg";
 
 export default {
   components: {JumpButton},

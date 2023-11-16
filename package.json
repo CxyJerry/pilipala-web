@@ -18,7 +18,7 @@
     "shaka-player": "^4.5.0",
     "vue": "^3.2.13",
     "vue-color": "^2.8.1",
-    "vue-cropper": "^0.6.4",
+    "vue-cropper": "^1.1.1",
     "vue-router": "^4.2.5",
     "vuex": "^4.1.0",
     "vuex-persistedstate": "^4.1.0"

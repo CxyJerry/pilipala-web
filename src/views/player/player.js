@@ -1,5 +1,4 @@
-import DPlayer from 'dplayer';
-import {get_video, interactive, interactive_info, play_count_submit, thumbnails, time_update} from "@/api/vod";
+import {get_video, interactive, interactive_info} from "@/api/vod";
 import Commonheader from "@/components/commonheader.vue";
 import {dash} from "@/utils/player";
 import {convert_to_count_unit, double_time_format, format_date} from "../../utils/unit";
@@ -8,9 +7,7 @@ import PButton from "@/components/p-button.vue";
 import Pfooter from "@/components/pfooter.vue";
 import PreviewVodCard from "@/views/player/components/preview-vod-card.vue";
 import FollowButton from "@/components/follow-button.vue";
-import {theme_color, theme_pink} from "@/style";
-import {get_danmaku, send_danmaku} from "@/api/danmaku";
-import {store} from "@/store";
+import {theme_color} from "@/style";
 import PDanmaku from "@/views/player/components/p-danmaku.vue";
 import PPlayer from "@/views/player/components/p-player.vue";
 import PVodLabel from "@/components/p-vod-label.vue";

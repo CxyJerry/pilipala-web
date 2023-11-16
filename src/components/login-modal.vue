@@ -55,22 +55,27 @@ export default {
 
     },
     send_code() {
-      code(this.modal.tel).then(res => {
-        let loop = setInterval(() => {
-          if (count > 0) {
-            this.modal.code_btn.content = `(${count})s后可重新发送`
-            this.modal.code_btn.disable = true
-            count -= 1;
-          } else {
-            this.modal.code_btn.content = '发送验证码'
-            this.modal.code_btn.disable = false
-            clearInterval(loop)
-          }
-        }, 1000)
-        this.$Message.success('验证码已发送')
-        let count = 60
+      this.$refs['login-form'].validateField('tel', has_error => {
+        if (!has_error) {
+          code(this.modal.tel).then(res => {
+            let loop = setInterval(() => {
+              if (count > 0) {
+                this.modal.code_btn.content = `(${count})s后可重新发送`
+                this.modal.code_btn.disable = true
+                count -= 1;
+              } else {
+                this.modal.code_btn.content = '发送验证码'
+                this.modal.code_btn.disable = false
+                clearInterval(loop)
+              }
+            }, 1000)
+            this.$Message.success('验证码已发送')
+            let count = 60
 
+          })
+        }
       })
+
     },
     init_modal_show() {
       this.modal.show = store.state.login_modal_visible

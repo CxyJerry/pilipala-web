@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import {defineComponent} from "vue";
 import LoginModal from "@/components/login-modal.vue";
 
 

@@ -1,5 +1,5 @@
 import mediainfo from "mediainfo.js";
-import {post_vod, pre_upload, upload, upload_cover} from "@/api/vod";
+import {post_vod, pre_upload, upload} from "@/api/vod";
 import Tabs from "@/views/gccenter/views/components/tabs.vue";
 import {convert_to_file_unit} from "@/utils/unit";
 import Label_input from "@/views/gccenter/views/components/label_input.vue";
@@ -7,9 +7,10 @@ import Textarea_input from "@/views/gccenter/views/components/textarea_input.vue
 import {Form, Modal} from "view-ui-plus";
 import TreeSelector from "@/components/tree-selector.vue";
 import {partitions} from "@/api/recommend";
+import PCoverUpload from "@/views/gccenter/views/gcupload/views/upload/components/p-cover-upload.vue";
 
 export default {
-    components: {Modal, TreeSelector, Form, Textarea_input, Label_input, Tabs},
+    components: {PCoverUpload, Modal, TreeSelector, Form, Textarea_input, Label_input, Tabs},
     data() {
         return {
             tabs: [
@@ -76,15 +77,6 @@ export default {
             this.file = file
             this.upload()
             return false
-        },
-        before_auto_upload_cover(file) {
-            this.upload_cover(file)
-            return false
-        },
-        upload_cover(file) {
-            upload_cover(file).then(res => {
-                this.form_data.cover_url = res.data
-            })
         },
         partition_selected(item) {
             let parent_node = null
@@ -155,12 +147,9 @@ export default {
                             let on_upload_callback = e => {
                                 let percent = (e.loaded / e.total) * 100
                                 this.upload_percent = percent + '%'
-                                if (percent >= 100) {
-                                    this.upload_status = 'completed'
-                                }
                             }
                             upload(this.cid, file, on_upload_callback).then(res => {
-                                console.log(res)
+                                this.upload_status = 'completed'
                             })
                         })
                     })

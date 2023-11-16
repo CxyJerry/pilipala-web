@@ -7,7 +7,6 @@ import {dash} from "@/utils/player";
 import DPlayer from "dplayer";
 import {play_count_submit, thumbnails, time_update} from "@/api/vod";
 import {store} from "@/store";
-import screenfull from "screenfull";
 import PButton from "@/components/p-button.vue";
 import PPlayerController from "@/views/player/components/p-player-controller.vue";
 

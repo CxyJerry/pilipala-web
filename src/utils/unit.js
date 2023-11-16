@@ -19,6 +19,7 @@ function convert_to_file_unit(file) {
 }
 
 function convert_to_count_unit(count) {
+    count = parseInt(count)
     let unit_idx = 0
     for (let i = count_unit.length - 1; i >= 0; i--) {
         if (count_unit[i].count < count) {
@@ -29,11 +30,12 @@ function convert_to_count_unit(count) {
 }
 
 function format_date(date, format_str = 'YYYY-MM-DD HH:mm:ss') {
+    date = parseInt(date)
     return moment(date).format(format_str)
 }
 
 function double_time_format(time) {
-    if (!time){
+    if (!time) {
         return '00:00'
     }
     time = parseInt(time)
@@ -47,7 +49,7 @@ function double_time_format(time) {
             } else {
                 result = last + result
             }
-            time = parseInt((time/60).toString())
+            time = parseInt((time / 60).toString())
         }
         if (time) {
             time = (time >= 10 ? time : '0' + time)
