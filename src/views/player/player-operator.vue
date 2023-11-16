@@ -1,5 +1,4 @@
 <script>
-import { send_danmaku } from "@/api/danmaku";
 
 export default {
   props: {

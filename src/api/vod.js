@@ -77,7 +77,7 @@ function upload(cid, file, on_upload_callback) {
 
 function upload_cover(cover) {
     let form = new FormData()
-    form.append('cover', cover)
+    form.append('cover', cover, "cover.png")
     return Api.post('/file/upload-cover', form)
 }
 

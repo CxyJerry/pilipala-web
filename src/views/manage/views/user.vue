@@ -1,5 +1,4 @@
 <script>
-import {delete_role, permissions, roles, save_role} from "@/api/permission";
 import PButton from "@/components/p-button.vue";
 import {Input} from "view-ui-plus";
 import {format_date} from "@/utils/unit";

@@ -1,6 +1,6 @@
 <script>
 import PPlayer from "@/views/player/components/p-player.vue";
-import {get_video, review, sd_video} from "@/api/vod";
+import {review, sd_video} from "@/api/vod";
 import Commonheader from "@/components/commonheader.vue";
 import PButton from "@/components/p-button.vue";
 
