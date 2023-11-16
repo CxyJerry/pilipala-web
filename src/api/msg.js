@@ -1,5 +1,4 @@
 import Api from './net'
-import { store } from "@/store";
 
 function unread_count() {
     return Api.get('/msg/unread/count')

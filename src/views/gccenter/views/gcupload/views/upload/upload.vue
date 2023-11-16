@@ -152,28 +152,13 @@ export default upload
               </div>
               <div class="form-item-content">
                 <div style="width: 200px;height: 150px">
-                  <Upload
-                      style=""
-                      accept="image/*"
-                      :multiple="false"
-                      :before-upload="before_auto_upload_cover"
-                      type="drag"
-                      action="#">
-                    <div
-                        style="background:#f6f6f6;padding:10px;display: flex;width: 100%;height: 60%;flex-direction: column;justify-content: center;align-items: center">
-                      <div v-if="!form_data.cover_url">
-                        <Icon type="ios-cloud-upload-outline" size="30" style="color: #00a1d6;"></Icon>
-                        <p style="margin: 5px">上传封面</p>
-                      </div>
-                      <div v-else>
-                        <img :src="`/api/${form_data.cover_url}`" alt="" style="width: 154px;height: 96px"/>
-                      </div>
-                    </div>
-                  </Upload>
+                  <p-cover-upload :cover_url="form_data.cover_url" @coverUpdate="c=>form_data.cover_url=c"/>
                 </div>
               </div>
             </div>
           </FormItem>
+
+
           <!--    标题    -->
           <FormItem prop="title">
             <div class="form-item">

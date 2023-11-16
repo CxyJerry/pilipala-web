@@ -1,9 +1,8 @@
 <script>
-import {apply_page, delete_role, permissions, role_grant, roles, save_role} from "@/api/permission";
+import {apply_page, role_grant, roles} from "@/api/permission";
 import PButton from "@/components/p-button.vue";
 import {Button, Input, Option, Select} from "view-ui-plus";
 import {format_date} from "@/utils/unit";
-import {user_page} from "@/api/user";
 
 
 export default {

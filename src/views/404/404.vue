@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import {Icon, Button} from 'view-ui-plus';
+import {Button, Icon} from 'view-ui-plus';
 
 export default {
   components: {

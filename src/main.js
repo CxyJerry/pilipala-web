@@ -4,7 +4,8 @@ import router from './router'
 import ViewUIPlus from 'view-ui-plus'
 import 'view-ui-plus/dist/styles/viewuiplus.css'
 import {store} from "@/store";
-import VueCropper from 'vue-cropper'
+import VueCropper from 'vue-cropper';
+import 'vue-cropper/dist/index.css'
 
 const app = createApp(App)
 app.use(router)

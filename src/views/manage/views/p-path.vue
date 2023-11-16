@@ -1,5 +1,5 @@
 <script>
-import {delete_path, permissions, paths, save_path} from "@/api/permission";
+import {delete_path, paths, permissions, save_path} from "@/api/permission";
 import PButton from "@/components/p-button.vue";
 import {Input} from "view-ui-plus";
 import {format_date} from "@/utils/unit";
