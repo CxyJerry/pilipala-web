@@ -17,7 +17,7 @@ export default {
       show_anchor: false,
       refreshing: false,
       partitions: [],
-      partition_loaded_idx: 0,
+      partitions_requesting: false,
       requested_partition: []
     }
 
@@ -44,18 +44,26 @@ export default {
       window.scrollTo({top: 0, behavior: 'smooth'})
     },
     request_recommends() {
+      this.scrollTop()
       this.refreshing = true
       setTimeout(() => {
         this.refreshing = false
       }, 500)
+      this.partitions = this.requested_partition
+      this.requested_partition = []
+      this.partition_feed = []
       recommends(6, 6, 5)
           .then(res => {
             this.feed = res.data
           })
+      this.request_partition_recommend()
+
     },
     request_partitions() {
-      partitions().then(res => {
+      partitions().then(async res => {
         this.partitions = Object.keys(res.data)
+        await this.$nextTick(() => {
+        })
         this.request_partition_recommend()
       })
     },
@@ -65,42 +73,32 @@ export default {
       }
       this.partition_loading = true
       let load_count = 0
-      let requesting = false
 
+      let that = this
       let loop = setInterval(() => {
-        if (this.partition_loaded_idx < this.partitions.length && load_count < 3) {
-          if (requesting) {
+        if (that.partitions.length > 0 && load_count < 3) {
+          if (that.partitions_requesting) {
             return;
           }
-          requesting = true
-          if (this.requested_partition.includes(this.partitions[this.partition_loaded_idx])) {
-            this.partition_loaded_idx++;
-            return;
-          }
-          recommendPartition(this.partitions[this.partition_loaded_idx], "投稿时间", 1, 5)
+          that.partitions_requesting = true
+          recommendPartition(that.partitions[0], "投稿时间", 1, 5)
               .then(res => {
-                requesting = false
+                this.partitions_requesting = false
                 if (res.data.total > 0) {
-                  if (this.requested_partition.includes(this.partitions[this.partition_loaded_idx])) {
-                    return;
-                  }
-                  this.requested_partition.push(this.partitions[this.partition_loaded_idx])
                   this.partition_feed.push({
-                    partition: this.partitions[this.partition_loaded_idx],
+                    partition: that.partitions[0],
                     value: res.data.page
                   })
                   load_count++
                 }
-                this.partition_loaded_idx++
+                this.requested_partition.push(that.partitions.shift())
               }).catch(err => {
-            requesting = false
-            this.partition_loaded_idx++
+            that.partitions_requesting = false
           })
         } else {
           clearInterval(loop)
         }
       })
-
       this.partition_loading = false
     },
   },
@@ -135,7 +133,7 @@ export default {
     </div>
 
     <!--  右侧刷新按钮  -->
-    <div style="position: absolute;right: 0;width: 10%;padding-left: 1%">
+    <div style="position: absolute;right: 0;width: 10%;padding-left: 1%;top: 50px">
       <div class="refresh-btn" @click="request_recommends">
         <div class="refresh-icon" :class="{'rotation-animation':refreshing}">
           <svg t="1697409301924" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -218,13 +216,15 @@ export default {
   margin-top: 5px;
   writing-mode: vertical-lr;
   text-orientation: mixed;
-  border: #dedede 1px solid;
+  border: #f1f1f1 1px solid;
   border-radius: 8px;
   padding: 15px 10px;
   font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .refresh-btn:hover {
@@ -234,11 +234,12 @@ export default {
 
 .anchor {
   border-radius: 10px;
-  border: #b2b2b2 1px solid;
   font-weight: bold;
   display: flex;
   flex-direction: column;
-  padding: 3px 10px
+  padding: 3px 10px;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .anchor:hover {
@@ -247,6 +248,7 @@ export default {
 }
 
 .refresh-batch {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   background: @theme-color;
   border-radius: 10px;
   padding: 10px;
