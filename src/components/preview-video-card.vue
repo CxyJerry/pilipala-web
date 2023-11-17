@@ -1,6 +1,6 @@
 <script>
 import PreviewPlayer from "@/components/preview-player.vue";
-import {convert_to_count_unit} from "../utils/unit";
+import {convert_to_count_unit, double_time_format} from "../utils/unit";
 
 export default {
   components: {PreviewPlayer},
@@ -40,6 +40,7 @@ export default {
     }
   },
   methods: {
+    double_time_format,
     convert_to_count_unit,
     play_bvod() {
       let route_data = this.$router.resolve({path: `/player/${this.bvod.bvId}`, query: {"cid": this.bvod.preview.cid}})
@@ -59,8 +60,8 @@ export default {
         <img :src="`/api/${bvod.coverUrl}`" alt=""
              style="width: 100%;height: 100%;position: relative; border: rgba(213,213,213,0.84) 1px solid;border-radius: 10px;object-fit: cover"/>
 
-        <div
-            style="position: absolute;bottom: 0;display: flex;flex-direction: row;padding: 6px;justify-content: center;align-items: center">
+        <div v-show="!show_partition"
+             style="position: absolute;bottom: 0;display: flex;flex-direction: row;padding: 6px;justify-content: center;align-items: center;width: 100%">
           <!--     观看数     -->
           <div
               style="display: flex;flex-direction: row;align-items: center;padding-left: 3px;padding-right: 3px;">
@@ -76,6 +77,9 @@ export default {
             <span style="color: rgba(224,224,224,0.73);margin-left: 3px;margin-right: 3px">{{
                 convert_to_count_unit(bvod.commentCount)
               }}</span>
+          </div>
+          <div style="flex: 1;padding: 5px;text-align: end;color: rgba(224,224,224,0.73)">
+            {{ double_time_format(bvod.duration)}}
           </div>
         </div>
       </div>
