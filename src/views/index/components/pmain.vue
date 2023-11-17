@@ -133,7 +133,7 @@ export default {
     </div>
 
     <!--  右侧刷新按钮  -->
-    <div style="position: absolute;right: 0;width: 10%;padding-left: 1%">
+    <div style="position: absolute;right: 0;width: 10%;padding-left: 1%;top: 50px">
       <div class="refresh-btn" @click="request_recommends">
         <div class="refresh-icon" :class="{'rotation-animation':refreshing}">
           <svg t="1697409301924" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -216,13 +216,15 @@ export default {
   margin-top: 5px;
   writing-mode: vertical-lr;
   text-orientation: mixed;
-  border: #dedede 1px solid;
+  border: #f1f1f1 1px solid;
   border-radius: 8px;
   padding: 15px 10px;
   font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .refresh-btn:hover {
@@ -232,11 +234,12 @@ export default {
 
 .anchor {
   border-radius: 10px;
-  border: #b2b2b2 1px solid;
   font-weight: bold;
   display: flex;
   flex-direction: column;
-  padding: 3px 10px
+  padding: 3px 10px;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .anchor:hover {
@@ -245,6 +248,7 @@ export default {
 }
 
 .refresh-batch {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   background: @theme-color;
   border-radius: 10px;
   padding: 10px;
