@@ -46,7 +46,7 @@ export default {
   <div class="container">
     <commonheader/>
     <div style="width: 60%;padding: 2%">
-      <p-player :cur_vod="cur_vod" :need_operation="false"/>
+      <p-player :cur_vod="cur_vod" :need_operation="false" :need_danmaku="false"/>
 
       <div style="display: flex;flex-direction: row">
         <p-button type="primary" @click="review('passed')">

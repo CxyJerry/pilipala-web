@@ -25,6 +25,10 @@ export default {
     need_operation: {
       type: Boolean,
       default: true
+    },
+    need_danmaku: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -65,7 +69,9 @@ export default {
           })
     },
     setup_realtime_sse() {
-      console.log('setup danmaku sse')
+      if (!this.need_danmaku) {
+        return
+      }
       let that = this
       const event_source = new EventSource(`/api/danmaku/subscription/${this.cur_vod.cid}`)
       event_source.onopen = function (e) {
