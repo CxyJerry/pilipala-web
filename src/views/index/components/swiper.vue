@@ -13,10 +13,44 @@ export default {
         transform: 'none',
         transition: '0.5s'
       },
+      isLoop: '',
       active_idx: 0
     }
   },
   methods: {
+    handleLeft() {
+      // 清除上次轮播的时间
+      clearInterval(this.isLoop)
+
+      this.move_to_left()
+
+      // 重新计算下次轮播时间
+      this.isLoop = setInterval(() => {
+        this.move_to_right()
+      }, 3000)
+    },
+    handleRight() {
+      // 清除上次轮播的时间
+      clearInterval(this.isLoop)
+
+      this.move_to_right()
+
+      // 重新计算下次轮播时间
+      this.isLoop = setInterval(() => {
+        this.move_to_right()
+      }, 3000)
+    },
+    handleMove(idx) {
+      // 清除上次轮播的时间
+      clearInterval(this.isLoop)
+
+      this.move_to(idx)
+
+      // 重新计算下次轮播时间
+      this.isLoop = setInterval(() => {
+        this.move_to_right()
+      }, 3000)
+    },
     move_to(idx) {
       this.active_idx = idx
       this.swiper_style.transform = `translateX(-${idx}00%)`
@@ -28,7 +62,7 @@ export default {
         this.swiper_style.transform = `translateX(-100%)`
         setTimeout(() => {
           this.swiper_style.transition = '0.5s'
-          this.move_to(this.active_idx + 1)
+          this.move_to(this.active_idx)
         }, 0)
       } else {
         this.move_to(this.active_idx + 1)
@@ -36,12 +70,12 @@ export default {
     },
     move_to_left() {
       if (this.active_idx === 0) {
-        this.active_idx = this.swiper_data.length - 2
+        this.active_idx = this.swiper_data.length - 1
         this.swiper_style.transition = 'none'
         this.swiper_style.transform = `translateX(-${this.swiper_data.length - 1}00%)`
         setTimeout(() => {
           this.swiper_style.transition = '0.5s'
-          this.move_to(this.active_idx - 1)
+          this.move_to(this.active_idx)
         }, 0)
       } else {
         this.move_to(this.active_idx - 1)
@@ -54,8 +88,8 @@ export default {
       this.swiper_data = this.swiper.slice()
       this.swiper_data.unshift(last)
       this.swiper_data.push(first)
-      this.move_to(1)
-      setInterval(() => {
+      //this.move_to(1)
+      this.isLoop = setInterval(() => {
         this.move_to_right()
       }, 3000)
     }
@@ -77,7 +111,7 @@ export default {
     <!--  卡片内容  -->
     <div class="swiper-container" :style="swiper_style">
       <div class="swiper-card" v-for="i in swiper_data" style="background: white"
-           @click="this.$router.push(`/player/${i.bvId}`)">
+        @click="this.$router.push(`/player/${i.bvId}`)">
         <img :src="`/api/${i.coverUrl}`" alt="" style="width: 100%;height: 100%">
         <div>{{ i }}</div>
       </div>
@@ -85,20 +119,22 @@ export default {
     </div>
     <!--  操作栏  -->
     <div
-        style="position: absolute;bottom: 0;right: 0;display: flex;flex-direction: row;width: 100%;padding:5%;align-items: center">
-      <div style="display: flex;flex-direction: row">
-        <div class="check_point"
-             :style="{background:this.active_idx===idx?'#fff':'rgba(255, 255, 255, 0.35)'}"
-             v-for="idx in this.swiper.length" @click="move_to(idx)">
-          &nbsp;
+      style="position: absolute;bottom: 0;right: 0;display: flex;flex-direction: row;width: 100%;padding:5%;align-items: center;align-items:flex-start;">
+      <div style="display: flex;flex-flow: column;">
+        <div class="swiper-title">这是一个长标题。。。。</div>
+        <div style="display: flex;flex-direction:row">
+          <div class="check_point" :style="{ background: this.active_idx === idx ? '#fff' : 'rgba(255, 255, 255, 0.35)' }"
+            v-for="(_, idx) in this.swiper" @click="handleMove(idx)">
+            &nbsp;
+          </div>
         </div>
       </div>
       <div style="display: flex;flex-direction: row;flex: 1;justify-content: end">
-        <div class="check_btn" @click="move_to_left">
-          <Icon type="ios-arrow-back" color="#fff"/>
+        <div class="check_btn" @click="handleLeft">
+          <Icon type="ios-arrow-back" color="#fff" />
         </div>
-        <div class="check_btn" @click="move_to_right">
-          <Icon type="ios-arrow-forward" color="#fff"/>
+        <div style="margin-left: 10px;" class="check_btn" @click="handleRight">
+          <Icon type="ios-arrow-forward" color="#fff" />
         </div>
       </div>
 
@@ -124,6 +160,13 @@ export default {
   position: relative;
   white-space: nowrap;
   overflow: hidden;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  transform: translateZ(0);
 }
 
 .swiper-card {
@@ -146,6 +189,13 @@ export default {
   100% {
     transform: translateX(-100%);
   }
+}
+
+.swiper-title {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: #fff;
 }
 
 .check_btn {
