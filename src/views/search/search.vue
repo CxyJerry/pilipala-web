@@ -1,6 +1,6 @@
 <script>
 import Commonheader from "@/components/commonheader.vue";
-import PreviewVideoCard from "@/components/preview-video-card.vue";
+import PreviewVideoCard from "@/components/vertical-preview-video-card.vue";
 import {store} from "@/store";
 import {search} from "@/api/search";
 import PreviewUserCard from "@/components/preview-user-card.vue";

@@ -1,7 +1,7 @@
 <script>
 import Commonheader from "@/components/commonheader.vue";
 import {recommendPartition} from "@/api/recommend";
-import PreviewVideoCard from "@/components/preview-video-card.vue";
+import PreviewVideoCard from "@/components/vertical-preview-video-card.vue";
 import Pfooter from "@/components/pfooter.vue";
 
 export default {
