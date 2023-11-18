@@ -13,11 +13,13 @@ import PPlayer from "@/views/player/components/p-player.vue";
 import PVodLabel from "@/components/p-vod-label.vue";
 import PCommentPanel from "@/views/player/components/p-comment-panel.vue";
 import {recommendPartition} from "@/api/recommend";
-import PreviewVideoCard from "@/components/preview-video-card.vue";
+import HorizontalPreviewVideoCard from "@/components/horizontal-preview-video-card.vue";
+
 
 export default {
     components: {
-        PreviewVideoCard,
+        HorizontalPreviewVideoCard,
+
         PCommentPanel,
         PVodLabel,
         PPlayer, PDanmaku, FollowButton, PreviewVodCard, Pfooter, PButton, PlayerOperator, Commonheader

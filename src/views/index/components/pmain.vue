@@ -2,7 +2,7 @@
 import Swiper from "@/views/index/components/swiper.vue";
 import { partitions, recommendPartition, recommends } from "@/api/recommend";
 import PreviewPlayer from "@/components/preview-player.vue";
-import PreviewVideoCard from "@/components/preview-video-card.vue";
+import PreviewVideoCard from "@/components/vertical-preview-video-card.vue";
 
 export default {
   components: { PreviewVideoCard, VideoCard: PreviewVideoCard, PreviewPlayer, Swiper },
