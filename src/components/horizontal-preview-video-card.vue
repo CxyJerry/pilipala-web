@@ -74,7 +74,7 @@ export default {
       </div>
     </div>
     <!--  信息板块  -->
-    <div style="padding-left: 5px;display: flex;flex-direction: column">
+    <div style="padding-left: 5px;display: flex;flex-direction: column;width: 100%">
       <div class="title" @click="play_bvod">
         {{ bvod.title }}
       </div>
@@ -148,8 +148,7 @@ export default {
 .feed-img-card {
   background: #bba77e;
   border-radius: 10px;
-  min-height: 120px;
-  min-width: 214px;
+  width: 100%;
   aspect-ratio: 16/9;
   display: flex;
   justify-content: center;
