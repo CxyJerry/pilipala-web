@@ -187,7 +187,6 @@ export default {
         </div>
       </div>
     </div>
-    <pfooter/>
   </div>
 
 </template>

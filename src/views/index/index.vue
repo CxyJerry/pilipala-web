@@ -14,7 +14,7 @@ export default {
     <pheader/>
     <pmain/>
   </div>
-  <pfooter/>
+
 </template>
 
 <style scoped>

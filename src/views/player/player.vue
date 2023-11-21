@@ -176,7 +176,7 @@ export default player
           </div>
         </div>
         <!--    推荐列表    -->
-        <div style="display: flex;flex-direction: column;flex: 1;margin-top: 5%;width: 100%;height: 100%">
+        <div style="display: flex;flex-direction: column;flex: 1;margin-top: 5%;width: 100%;">
           <horizontal-preview-video-card style="width: 100%;" v-for="(bvod,idx) in recommend_list" :bvod="bvod"
                                          :id_suffix="bvod.partition" :show_partition="false"/>
         </div>
@@ -186,7 +186,6 @@ export default player
 
   </div>
 
-  <pfooter/>
 </template>
 
 <style lang="less" scoped>
