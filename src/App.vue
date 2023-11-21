@@ -1,17 +1,20 @@
 <template>
-  <router-view />
-  <login-modal />
+  <router-view/>
+  <login-modal/>
+  <pfooter/>
 </template>
 
 <script>
 import {defineComponent} from "vue";
 import LoginModal from "@/components/login-modal.vue";
+import Pfooter from "@/components/pfooter.vue";
 
 
 export default defineComponent({
-  components: { LoginModal },
+  components: {Pfooter, LoginModal},
   methods: {},
-  mounted() {},
+  mounted() {
+  },
 });
 </script>
 
@@ -21,11 +24,13 @@ export default defineComponent({
   padding: 0;
   min-width: 100%;
   min-height: 100vh;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+
   display: flex;
   flex-direction: column;
+}
+
+body {
+  margin: 0;
+  padding: 0;
 }
 </style>
