@@ -5,7 +5,7 @@ import PDanmaku from "@/views/player/components/p-danmaku.vue";
 import {theme_color} from "@/style";
 import {dash} from "@/utils/player";
 import DPlayer from "dplayer";
-import {play_count_submit, thumbnails, time_update} from "@/api/vod";
+import {thumbnails, time_update} from "@/api/vod";
 import {store} from "@/store";
 import PButton from "@/components/p-button.vue";
 import PPlayerController from "@/views/player/components/p-player-controller.vue";
@@ -113,7 +113,6 @@ export default {
       })
     },
     setup_time_update() {
-      let canSubmitPlayCountLimit = 0
       // 播放时间更新
       this.player.on('timeupdate', () => {
         let time = this.player.video.currentTime
@@ -123,12 +122,7 @@ export default {
         // 每2秒上报一次
         if (now - this.pre_update_time_event_tick >= 2000) {
           this.pre_update_time_event_tick = now
-          time_update(this.cur_vod.bvId, this.cur_vod.cid, parseInt(time))
-          canSubmitPlayCountLimit += 1
-          // 视频连续上报10次播放时间，播放数+1
-          if (canSubmitPlayCountLimit === 10) {
-            play_count_submit(this.cur_vod.cid)
-          }
+          time_update(this.cur_vod.bvId, this.cur_vod.cid, parseInt(time), this.cur_vod.play_action_id)
         }
       })
 

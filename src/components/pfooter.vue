@@ -12,7 +12,6 @@
       <div class="filling">
         <span>©2023 pilipala.cloud 版权所有</span>
         <span><a href="https://beian.miit.gov.cn" target="_blank">ICP证: 闽ICP备2023021082号</a></span>
-        <span>代理域名注册服务机构：烟台帝思普</span>
         <br/>
       </div>
     </div>
@@ -34,6 +33,7 @@
   bottom: 0;
   position: relative;
   flex-direction: column;
+  margin-top: 3%;
 }
 
 .footer-container {

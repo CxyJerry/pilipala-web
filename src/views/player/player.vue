@@ -89,7 +89,7 @@ export default player
         <div style="display: flex;flex-direction: row;padding: 10px">
           <!--   点赞   -->
           <div :class="{'active-operation-icon':vod_interactive.liked,'operation-icon':!vod_interactive.liked}"
-               @click="interactive('like',cur_vod.cid)&&get_interactive_info()">
+               @click="interactive_action('like')">
             <svg t="1698847767122" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
                  p-id="2382" width="25" height="25">
               <path
@@ -100,7 +100,7 @@ export default player
           </div>
           <!--   投币   -->
           <div :class="{'active-operation-icon':vod_interactive.coined,'operation-icon':!vod_interactive.coined}"
-               @click="interactive('coin',cur_vod.cid)&&get_interactive_info()">
+               @click="interactive_action('coin')">
             <svg t="1698847805965" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
                  p-id="3861" width="25" height="25">
               <path d="M511.609097 961.619254" p-id="3862"></path>
@@ -115,7 +115,7 @@ export default player
           </div>
           <!--   收藏   -->
           <div :class="{'active-operation-icon':vod_interactive.collected,'operation-icon':!vod_interactive.collected}"
-               @click="interactive('collect',cur_vod.cid)&&get_interactive_info()">
+               @click="interactive_action('collect')">
             <svg t="1698848097286" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
                  p-id="13308" width="25" height="25">
               <path

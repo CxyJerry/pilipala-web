@@ -57,7 +57,9 @@ export default {
         format_date,
         get_bvod() {
             this.bvod.bvId = this.$route.params.bvid
-            get_video(this.bvod.bvId)
+            this.cur_vod.cid = this.$route.query.cid
+            console.log('cid: ', this.cur_vod.cid)
+            get_video(this.bvod.bvId, this.cur_vod.cid)
                 .then(res => {
                     this.bvod = res.data
                     this.author = this.bvod.author
@@ -71,7 +73,10 @@ export default {
                         }
                         vod.quality = quality
                     }
-                    this.cur_vod = this.bvod.vodList[0]
+                    this.cur_vod = this.cur_vod.cid ?
+                        this.bvod.vodList.filter(v => v.cid === this.cur_vod.cid)[0] :
+                        this.bvod.vodList[0]
+                    this.cur_vod.play_action_id = this.bvod.actionId
                     this.get_interactive_info()
                     this.request_commend()
                 })
@@ -110,6 +115,9 @@ export default {
             interactive_info(this.cur_vod.cid).then(res => {
                 this.vod_interactive = res.data
             })
+        },
+        interactive_action(action) {
+            interactive(action, this.cur_vod.cid).then(_ => this.get_interactive_info())
         }
     },
     mounted() {
