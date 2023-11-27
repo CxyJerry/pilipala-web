@@ -15,12 +15,20 @@
         <img alt="开源协议" src="https://img.shields.io/badge/%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE-GPL-blue">
     </a>
     <a href="https://github.com/CxyJerry/pilipala-web/actions/workflows/docker-image.yml"><img src="https://github.com/CxyJerry/pilipala-web/actions/workflows/docker-image.yml/badge.svg"></a>
+   <a href="https://pilipala.cloud">
+      <img alt="Static Badge" src="https://img.shields.io/badge/%E4%BD%93%E9%AA%8C-%E9%93%BE%E6%8E%A5-gold">
+   </a>
 </div>
 
 ## 项目介绍
 
 噼里啪啦视频弹幕网是一个专注于做视频点播的前端Web项目，通过对 [Dplayer](https://github.com/DIYgod/DPlayer) 的魔改，
 集成 [dash.js](https://github.com/Dash-Industry-Forum/dash.js) 实现 Dash 视频播放。本项目持续更新中！
+
+## 体验地址
+
+#### <a href="https://pilipala.cloud">https://pilipala.cloud</a>
+
 
 ## 环境搭建
 
