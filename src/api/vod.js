@@ -117,16 +117,21 @@ function review_page(page_no, page_size, type, uid) {
     })
 }
 
-function get_video(bvid) {
-    return Api.get('vod/vod/' + bvid)
+function get_video(bvid, cid) {
+    return Api.get('vod/vod/' + bvid, {
+        params: {
+            cid: cid
+        }
+    })
 }
 
-function time_update(bvid, cid, time) {
-    return Api.put(`/vod/time/${bvid}/${cid}?time=${time}`)
-}
-
-function play_count_submit(bvid) {
-    return Api.put('/vod/vod/play/' + bvid)
+function time_update(bvid, cid, time, play_action_id) {
+    return Api.put(`/vod/time/${bvid}/${cid}`, {}, {
+        params: {
+            time: time,
+            play_action_id: play_action_id
+        }
+    })
 }
 
 function thumbnails(cid) {
@@ -167,7 +172,6 @@ export {
     review_page,
     get_video,
     time_update,
-    play_count_submit,
     thumbnails,
     interactive,
     interactive_info,

@@ -1,4 +1,6 @@
 <script>
+import {nextTick} from "vue";
+
 export default {
   props: {
     danmakus: Array, // 弹幕数组，包含文本和时间戳信息
@@ -56,7 +58,8 @@ export default {
     update_waiting_danmakus(danmakus) {
       this.wating = []
       for (let danmaku of danmakus) {
-        this.wating.push(this.build_danmaku(danmaku))
+        let dan = this.build_danmaku(danmaku)
+        this.wating.push(dan)
       }
     },
     build_danmaku(danmaku) {
@@ -76,13 +79,15 @@ export default {
         }
       }
     },
+    animationend(danmaku) {
+      danmaku.completed = true
+    }
   },
 
   watch: {
     video_current_play_time: {
       immediate: true,
       handler: function () {
-        let waiting = []
         for (let danmaku of this.wating) {
           // 将每条弹幕计算出一个唯一值，已经在滚动的就不需要再次加入滚动列表了
           const uni_obj = {
@@ -93,18 +98,13 @@ export default {
             type: danmaku.type
           }
           let uni_id = JSON.stringify(uni_obj)
-          if (danmaku.time < this.video_current_play_time &&
+          if (danmaku.time === this.video_current_play_time &&
               !this.running_danmaku_id_map.includes(uni_id)) {
-            setTimeout(() => {
-              danmaku.style['animation-play-state'] = this.stop ? 'paused' : 'running'
-              this.running.push(danmaku)
-              this.running_danmaku_id_map.push(uni_id)
-            }, 10)
-          } else {
-            waiting.push(danmaku)
+            danmaku.style['animation-play-state'] = this.stop ? 'paused' : 'running'
+            this.running.push(danmaku)
+            this.running_danmaku_id_map.push(uni_id)
           }
         }
-        this.wating = waiting
       }
     },
     danmakus: {
@@ -140,7 +140,7 @@ export default {
 <template>
   <div class="danmaku-container">
     <div v-for="(danmaku, index) in running" :style="danmaku.style?danmaku.style:{}" :key="index"
-         class="danmaku">
+         class="danmaku" @animationend="animationend(danmaku)">
       <div :class="{'danmaku-border':danmaku.author===this.cur_uid}">
         {{ danmaku.text }}
       </div>
@@ -157,6 +157,7 @@ export default {
   bottom: 0;
   pointer-events: none;
   overflow: hidden;
+  text-align: start;
 }
 
 @keyframes danmaku {
@@ -164,8 +165,8 @@ export default {
     transform: translateX(100%);
   }
   100% {
-    transform: translateX(-50%);
-    display: none;
+    transform: translateX(-100%);
+    //display: none;
   }
 }
 
@@ -178,6 +179,8 @@ export default {
   transition: transform .1s ease;
   animation: danmaku 10s linear 1;
   animation-fill-mode: forwards;
+  display: flex;
+  justify-content: start;
 }
 
 .danmaku-border {
