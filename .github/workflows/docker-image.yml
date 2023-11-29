@@ -1,0 +1,36 @@
+name: Pilipala-Web CI
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*.*'
+
+env:
+  IMAGE_NAME: Pilipala
+
+jobs:
+  build_and_push_image:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Shanghai
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Extract tag name
+        id: extract_tag
+        run: echo "TAG_NAME=$(echo $GITHUB_REF | cut -d '/' -f 3)" >> $GITHUB_ENV
+
+      - name: login docker hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: build and push image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          push: true
+          tags: cxyjerry/pilipala-web:${{ env.TAG_NAME }}
