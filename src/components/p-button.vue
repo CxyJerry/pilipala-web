@@ -23,12 +23,12 @@ export default {
     return {
       size_map: {
         'small': {
-          padding: '3px 10px',
+          padding: '2px 10px',
           'font-size': 'small',
           'border-radius': '5px'
         },
         'normal': {
-          padding: '5px 15px',
+          padding: '3px 16px',
           'font-size': 'normal',
           'border-radius': '8px'
         },
@@ -75,11 +75,9 @@ export default {
 </script>
 
 <template>
-  <div
-      :class="button_class"
-      :style="style()">
-    <slot name="icon"/>
-    <slot name="content"/>
+  <div :class="button_class" :style="style()">
+    <slot name="icon" />
+    <slot name="content" />
   </div>
 </template>
 
@@ -116,6 +114,7 @@ export default {
   align-items: center;
   padding: 3px 10px;
   color: white;
+  font-weight: 600;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -133,9 +132,12 @@ export default {
 }
 
 @keyframes jump {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-5px);
   }
