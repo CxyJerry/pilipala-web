@@ -3,10 +3,11 @@ import {store} from "@/store";
 import PButton from "@/components/p-button.vue";
 import {get_comment, send_comment} from "@/api/comment";
 import PComment from "@/views/player/components/p-comment.vue";
+import AtableInput from "@/components/atable-input.vue";
 
 export default {
   name: "p-comment-panel",
-  components: {PComment, PButton},
+  components: {AtableInput, PComment, PButton},
   props: {
     cid: String,
   },
@@ -19,27 +20,10 @@ export default {
         size: 36,
         total: 0
       },
-      comment: {
-        parent_comment_id: '',
-        parent_comment_author_name: '',
-        content: ''
-      }
+
     }
   },
   methods: {
-    send_comment() {
-      send_comment(this.cid, this.comment.parent_comment_id, this.comment.content)
-          .then(res => {
-            if (this.comment.parent_comment_id && this.comment.parent_comment_id.length > 0) {
-              this.comment.child.unshift(res.data)
-            } else {
-              this.page.data.unshift(res.data)
-            }
-
-            this.cancel_reply()
-            this.$Message.success('已发送')
-          })
-    },
     get_comments() {
       if (!this.cid) {
         return
@@ -50,14 +34,20 @@ export default {
             this.page.data.push.apply(this.page.data, res.data.page)
           })
     },
-    cancel_reply() {
-      this.comment = {
-        parent_comment_id: '',
-        parent_comment_author_name: '',
-        content: ''
+    on_comment_send(parent_comment, comment) {
+      console.log(comment)
+      if (parent_comment) {
+        if (parent_comment.child) {
+          parent_comment.child.unshift(comment)
+        } else {
+          parent_comment.child = [comment]
+        }
+
+      } else {
+        this.page.data.unshift(comment)
       }
-      store.commit('set_reply_comment', null)
     }
+
   },
   watch: {
     cid: {
@@ -66,16 +56,6 @@ export default {
         this.get_comments()
       }
     },
-    '$store.state.reply_comment': {
-      immediate: true,
-      handler: function (comment_info, old) {
-        console.log(comment_info)
-        this.comment.parent_comment_id = comment_info.comment.id
-        this.comment.parent_comment_author_name = comment_info.comment.author.nickName
-        this.comment.child = comment_info.child
-        store.commit('set_reply_comment', null)
-      }
-    }
   },
   mounted() {
     this.user_info = store.state.user_info
@@ -107,34 +87,7 @@ export default {
         </div>
       </div>
       <!--   评论输入区   -->
-      <div style="width: 100%;display: flex;flex-direction: row;align-items: center">
-        <div class="comment-input_container">
-          <div v-show="comment.parent_comment_author_name.length>0"
-               style="display: flex;flex-direction: row;align-items: center">
-            <div style="flex: 1">回复: @{{ comment.parent_comment_author_name }}</div>
-            <div style="display: flex;justify-content: end;align-items: center;" class="cancel-reply"
-                 @click="cancel_reply">
-              <svg t="1699102472468" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                   xmlns="http://www.w3.org/2000/svg" p-id="2325" width="16" height="16">
-                <path
-                    d="M512 928c-229.76 0-416-186.24-416-416s186.24-416 416-416 416 186.24 416 416-186.24 416-416 416zM702.752 390.688c7.808-7.808 7.808-20.512 0-28.32l-42.496-42.464c-7.808-7.808-20.512-7.808-28.32 0l-120.352 120.352-120.352-120.352c-7.808-7.808-20.512-7.808-28.32 0l-42.496 42.464c-7.808 7.808-7.808 20.512 0 28.32l120.384 120.384-120.384 120.32c-7.808 7.808-7.808 20.512 0 28.32l42.496 42.496c7.808 7.808 20.512 7.808 28.32 0l120.352-120.384 120.352 120.384c7.808 7.808 20.512 7.808 28.32 0l42.496-42.496c7.808-7.808 7.808-20.512 0-28.32l-120.384-120.32 120.384-120.384z"
-                    p-id="2326"></path>
-              </svg>
-            </div>
-          </div>
-
-          <input v-model="comment.content" class="comment-input" @keyup.enter=send_comment
-                 placeholder="评论千万条，等你发一条"/>
-        </div>
-        <div style="width: 10%">
-          <p-button @click="send_comment"
-                    :disable="comment.content.length===0"
-                    type="primary">
-            <template v-slot:content>发布</template>
-          </p-button>
-        </div>
-
-      </div>
+      <atable-input :cid="this.cid" @on-comment-send="on_comment_send"/>
     </div>
     <div style="width: 100%">
       <!--   评论列表   -->
@@ -181,33 +134,4 @@ export default {
   align-items: center;
 }
 
-.comment-input_container {
-  border: 1px solid #dedede;
-  line-height: 30px;
-  background: #ebebeb;
-  border-radius: 5px;
-  padding: 0 10px;
-  margin-left: 10px;
-  margin-right: 10px;
-  font-size: small;
-  flex: 1;
-  flex-direction: row;
-}
-
-.comment-input {
-  outline: none;
-  border-radius: 5px;
-  border: none;
-  background: #ebebeb;
-  width: 100%;
-}
-
-.cancel-reply {
-  fill: #8a8a8a;
-}
-
-.cancel-reply:hover {
-  fill: @theme-color;
-  cursor: pointer;
-}
 </style>

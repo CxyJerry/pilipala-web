@@ -1,10 +1,9 @@
 <script>
 import Pheader from "@/views/index/components/pheader.vue";
 import Pmain from "@/views/index/components/pmain.vue";
-import Pfooter from "@/components/pfooter.vue";
 
 export default {
-  components: {Pfooter, Pmain, Pheader},
+  components: {Pmain, Pheader},
 }
 
 </script>

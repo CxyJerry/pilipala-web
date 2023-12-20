@@ -23,7 +23,6 @@ export default defineComponent({
   position: relative;
   padding: 0;
   min-width: 100%;
-  min-height: 100vh;
   content: '';
   display: flex;
   flex-direction: column;

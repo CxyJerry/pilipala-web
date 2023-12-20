@@ -31,6 +31,11 @@ export default {
         child: this.page.data
       }
       store.commit('set_reply_comment', comment_info)
+    },
+    format_content(){
+      let tempElement = document.createElement('div');
+      tempElement.innerHTML = this.comment.content;
+      return tempElement.innerHTML
     }
   },
   data() {
@@ -76,7 +81,9 @@ export default {
         {{ comment.author.nickName }}
       </div>
       <div class="comment">
-        {{ comment.content }}<span @click="reply">回复</span>
+        <div v-html="format_content()" style="display: flex;flex-direction: row">
+        </div>
+        <span @click="reply">回复</span>
       </div>
       <div class="time">
         {{ format_date(comment.date) }}
@@ -137,6 +144,9 @@ export default {
 }
 
 .comment {
+  display: flex;
+  flex-direction: row;
+
   span {
     font-size: small;
     color: #cdcdcd;
