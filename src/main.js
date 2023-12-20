@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import ViewUIPlus from 'view-ui-plus'
 import 'view-ui-plus/dist/styles/viewuiplus.css'
+import "quill-mention/dist/quill.mention.min.css";
 import {store} from "@/store";
 import VueCropper from 'vue-cropper';
 import 'vue-cropper/dist/index.css'

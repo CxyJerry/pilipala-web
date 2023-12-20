@@ -38,7 +38,7 @@ export default {
       <!--  头像  -->
       <div class="avatar-img" @click="this.$router.push(`/sphere/${user_info.uid}`)">
         <!--    实际头像    -->
-        <img :src="user_info.avatar" alt="" v-if="user_info&&user_info.avatar">
+        <img :src="`/api/${user_info.avatar}`" style="width: 50px;height: 50px" alt="" v-if="user_info&&user_info.avatar">
         <!--    候补头像    -->
         <div
             style="display: flex;justify-content: center;align-items: center;background-color: white;border-radius: 9999px"

@@ -44,6 +44,9 @@ const routes = [
     {
         path: '/about',
         name: 'about',
+        meta: {
+            allow: true
+        },
         component: () => import('../views/about/about.vue')
     },
     {
@@ -108,6 +111,9 @@ const routes = [
     },
     {
         path: '/manage/',
+        meta: {
+            allow: true
+        },
         name: 'manage',
         component: () => import('../views/manage/p-manage.vue'),
         children: [
@@ -135,6 +141,14 @@ const routes = [
                 path: 'apply',
                 name: 'apply',
                 component: () => import('../views/manage/views/apply.vue')
+            },
+            {
+                path: 'message-template',
+                name: 'message-template',
+                meta: {
+                    allow: true
+                },
+                component: () => import('../views/manage/views/message-template.vue')
             },
             {
                 path: '',
@@ -167,10 +181,24 @@ const routes = [
         name: 'mysphere',
         component: () => import('@/views/sphere/sphere.vue')
     },
+    {
+        path: '/message',
+        name: 'message',
+        meta: {
+            allow: true
+        },
+        component: () => import('@/views/message/message-center.vue')
+    },
 ];
 
 async function createDynamicRouter() {
-    let accessible = (await accessible_paths()).data
+    let accessible = []
+    try {
+        accessible = (await accessible_paths()).data
+    } catch (e) {
+        console.log(e)
+    }
+
     check_route(routes, '', accessible)
 
     store.commit('set_accessible_paths', accessible)

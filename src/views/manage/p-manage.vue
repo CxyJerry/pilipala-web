@@ -29,6 +29,12 @@ export default {
           name: '申请管理',
           path: '/manage/apply',
         },
+        {
+          icon: require("../../assets/content_manager.png"),
+          name: '消息模板',
+          path: '/manage/message-template',
+        },
+
 
       ]
     }

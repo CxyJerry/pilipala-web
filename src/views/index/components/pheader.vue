@@ -240,7 +240,8 @@ export default {
   left: 0;
   right: 0;
   z-index: 99;
-  background: @theme-color;
+  height: 120px;
+  background-image: url("@/assets/sky.webp");
 }
 
 .header-bar {
@@ -253,7 +254,6 @@ export default {
 
 .header-banner {
   color: white;
-
   padding-top: 30px;
   padding-left: 50px;
   padding-bottom: 20px;
