@@ -1,5 +1,5 @@
 import mediainfo from "mediainfo.js";
-import {post_vod, pre_upload, upload} from "@/api/vod";
+import {post_vod, pre_upload, upload, upload_completed} from "@/api/vod";
 import Tabs from "@/views/gccenter/views/components/tabs.vue";
 import {convert_to_file_unit} from "@/utils/unit";
 import Label_input from "@/views/gccenter/views/components/label_input.vue";
@@ -8,6 +8,7 @@ import {Form, Modal} from "view-ui-plus";
 import TreeSelector from "@/components/tree-selector.vue";
 import {partitions} from "@/api/recommend";
 import PCoverUpload from "@/views/gccenter/views/gcupload/views/upload/components/p-cover-upload.vue";
+import * as qiniu from 'qiniu-js'
 
 export default {
     components: {PCoverUpload, Modal, TreeSelector, Form, Textarea_input, Label_input, Tabs},
@@ -143,13 +144,10 @@ export default {
                         pre_upload(res).then(res => {
                             this.cid = res.data.cid
                             this.bvid = res.data.bvId
-                            that.change_start_upload(true)
-                            let on_upload_callback = e => {
-                                let percent = (e.loaded / e.total) * 100
-                                this.upload_percent = percent + '%'
-                            }
-                            upload(this.cid, file, on_upload_callback).then(res => {
-                                this.upload_status = 'completed'
+                            upload(this.cid).then(res => {
+                                let token = res.data.token
+                                let filename = res.data.filename
+                                this.qiniu_upload(this.cid, file, token, filename)
                             })
                         })
                     })
@@ -157,6 +155,41 @@ export default {
                 this.upload_status = 'fail'
                 console.log(err)
             })
+        },
+        qiniu_upload(cid, file, token, filename) {
+            this.change_start_upload(true)
+            let observable =
+                qiniu.upload(
+                    file,
+                    filename,
+                    token,
+                    {
+                        fname: filename,
+                        mimeType: 'video/mp4'
+                    },
+                    {
+                        region: qiniu.region.z0,
+                        useCdnDomain: true
+                    });
+            let subscription = null;
+            let that = this
+            let observer = {
+                next(res) {
+                    that.upload_percent = Math.round(res.total.percent * 100) / 100 + '%'
+                    console.log(res)
+                    console.log(that.upload_percent)
+                },
+                error(err) {
+                    console.log(err)
+                    this.$Message.error('上传失败')
+                },
+                complete(res) {
+                    that.upload_status = 'completed'
+                    upload_completed(cid)
+                    subscription.unsubscribe()
+                }
+            }
+            subscription = observable.subscribe(observer) // 上传开始
         },
         change_start_upload(value) {
             this.start_upload = value

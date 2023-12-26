@@ -63,16 +63,29 @@ function pre_upload(mediainfo) {
     })
 }
 
-function upload(cid, file, on_upload_callback) {
-    let form = new FormData()
-    form.append('video', file)
-    form.append('cid', cid)
-    return Api.post('/file/upload', form, {
-        onUploadProgress: e => {
-            console.log('enter progress event')
-            on_upload_callback(e)
+function upload(cid) {
+    // let form = new FormData()
+    // form.append('video', file)
+    // form.append('cid', cid)
+    // return Api.post('/file/upload', form, {
+    //     onUploadProgress: e => {
+    //         console.log('enter progress event')
+    //         on_upload_callback(e)
+    //     }
+    // });
+    return Api.get('/file/upload', {
+        params: {
+            cid: cid
         }
-    });
+    })
+}
+
+function upload_completed(cid) {
+    Api.head('/file/upload/completed', {
+        params: {
+            cid: cid
+        }
+    })
 }
 
 function upload_cover(cover) {
@@ -166,6 +179,7 @@ function review(cid, status) {
 export {
     pre_upload,
     upload,
+    upload_completed,
     upload_cover,
     post_vod,
     content_page,
