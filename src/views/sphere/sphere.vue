@@ -6,23 +6,44 @@ import {format_date} from "@/utils/unit";
 import Pfooter from "@/components/pfooter.vue";
 import {toRaw} from "vue";
 import FollowButton from "@/components/follow-button.vue";
+import PMain from "@/views/sphere/components/p-main.vue";
+import PSide from "@/views/sphere/components/p-side.vue";
+import PCollections from "@/views/sphere/components/p-collections.vue";
+import PVods from "@/views/sphere/components/p-vods.vue";
 
 export default {
-  components: {FollowButton, Pfooter, Commonheader},
+  components: {PVods, PCollections, PSide, PMain, FollowButton, Commonheader},
   data() {
     return {
       user: {
         uid: '',
-        info: {}
+        info: {
+          followCount: 0,
+          fansCount: 0,
+          likeCount: 0,
+          viewCount: 0,
+        }
       },
-      page: {
-        no: 1,
-        size: 36,
-        total: 0,
-        vod_type: 'passed',
-        data: []
-      },
-      loading: false
+      loading: false,
+      tabs: [
+        {
+          tab_name: '主页',
+          icon: require('@/assets/main.svg')
+        },
+        {
+          tab_name: '动态',
+          icon: require('@/assets/dynamic.svg')
+        },
+        {
+          tab_name: '稿件',
+          icon: require('@/assets/vod.svg')
+        },
+        {
+          tab_name: '收藏',
+          icon: require('@/assets/collect.svg'),
+        }
+      ],
+      active_tab: '主页'
     }
   },
   methods: {
@@ -32,39 +53,17 @@ export default {
         this.user.info = res.data
       })
     },
-    request_page() {
-      this.loading = true
-      content_page(this.page.no, this.page.size, this.page.vod_type, this.user.uid)
-          .then(res => {
-            this.loading = false
-            this.page.data = res.data.page
-            this.page.total = res.data.total
-            for (let bvod of this.page.data) {
-              bvod.mtime = format_date(bvod.mtime)
-            }
-          })
-          .catch(err => {
-          })
+    change_tab(tab) {
+      this.active_tab = tab.tab_name
     },
-    change_page_no(no) {
-      this.page.no = no
-      this.request_page()
-    },
-    change_page_size(size) {
-      this.page.size = size
-      this.page.no = 1
-      this.request_page()
-    },
-    play_vod(vod) {
-      vod = toRaw(vod)
-      let bvid = vod.bvId
-      this.$router.push('/player/' + bvid)
-    },
-
+    more_data(type) {
+      if (type === '收藏' || type === '稿件') {
+        this.active_tab = type
+      }
+    }
   },
   mounted() {
     this.init_uid()
-    this.request_page()
   }
 }
 
@@ -93,102 +92,75 @@ export default {
         </div>
         <!--   昵称     -->
         <div style="display: flex;flex-direction: column;padding-left: 5px">
-          <span style="font-size: large">{{ user.info.nickName }}</span>
-          <span style="font-size: 12px;color: #e8e8e8">{{
+          <span style="font-size: x-large">{{ user.info.nickName }}</span>
+          <span style="font-size: 12px;color: white">{{
               user.info.intro ? user.info.intro : '这个用户很懒，这里啥也没有'
             }}</span>
         </div>
-        <!--    粉丝信息    -->
-        <div style="flex:1;display: flex;align-items: end;justify-content: end;flex-direction: column">
+        <div style="padding: 10px">
           <follow-button class="follow-btn" style="margin-bottom:  5px" :user="user.info"/>
-          <div style="display: flex;flex-direction: row">
-              <span style="padding-left: 5px;padding-right: 5px;font-size: small;color: #e8e8e8">关注数：{{
-                  user.info.followCount
-                }}</span>
-            <span style="padding-left: 5px;padding-right: 5px;font-size: small;color: #e8e8e8">粉丝数: {{
-                user.info.fansCount
-              }}</span>
-          </div>
-
         </div>
       </div>
+      <div style="background: white;padding: 0 10px;display: flex;align-items: center">
+        <!--    选项卡    -->
+        <div style="line-height: 50px;display: flex;flex-direction: row">
+          <div :class="{'tab-item':active_tab!==tab.tab_name,'tab-item-active':active_tab===tab.tab_name}"
+               v-for="tab in tabs" @click="change_tab(tab)">
+            <div style="display: flex;align-items: center;justify-content: center;flex-direction: row">
+              <img :src="tab.icon" alt="">
+              <span style="margin: 5px">
+              {{ tab.tab_name }}
+            </span>
+            </div>
+          </div>
 
-      <div class="vod-panel">
-        <!--   vod list   -->
-        <div style="display: flex;flex-direction: column;flex: 1;height: 100%;position: relative">
-          <div style="min-height: 10%;justify-content: center;align-items: center">
-            <div
-                style="line-height: normal;text-align: center;display: flex;justify-content: center;align-items: center;height: 50px"
-                v-if="page.data.length===0">
-              <div style="color: #aeaeae">
-                这里啥也没有~
+        </div>
+        <!--    粉丝信息    -->
+        <div
+            style="flex:1;display: flex;align-items: end;justify-content: end;flex-direction: column;font-size: smaller">
+          <div style="display: flex;flex-direction: row">
+            <div style="padding-left: 5px;padding-right: 5px;color: #a5a5a5;">
+              关注数
+              <div style="display: flex;align-items: center;justify-content: center">
+                {{ user.info.followCount ? user.info.followCount : 0 }}
               </div>
             </div>
-            <div>
-              <div class="vod-card" v-for="(vod,idx) in page.data" @click="play_vod(page.data[idx])">
-                <img :src="`/api/${vod.coverUrl}`" alt=""
-                     style="height: 96px;width: 154px;border-radius: 5px"/>
-                <div style="margin-left: 2%;display: flex;flex-direction: column;justify-content: center">
-                  <div class="vod-title">
-                    {{ vod.title }}
-                  </div>
-                  <div style="line-height: 30px">
-                    {{ vod.mtime }}
-                  </div>
-                  <div style="display: flex;flex-direction: row">
-                    <div style="width: 50px">
-                      <Icon type="logo-youtube" color="#a9a9a9"/>
-                      <span style="padding: 5px;font-size: small">{{ vod.viewCount }}</span>
-                    </div>
-                    <div style="width: 50px">
-                      <Icon type="md-thumbs-up" color="#a9a9a9"/>
-                      <span style="padding: 5px;font-size: small">{{ vod.likeCount }}</span>
-                    </div>
-                    <div style="width: 50px">
-                      <Icon type="ios-list-box" color="#a9a9a9"/>
-                      <span style="padding: 5px;font-size: small">{{ vod.barrageCount }}</span>
-                    </div>
-                    <div style="width: 50px">
-                      <Icon type="ios-text" color="#a9a9a9"/>
-                      <span style="padding: 5px;font-size: small">{{ vod.commentCount }}</span>
-                    </div>
-                    <div style="width: 50px">
-                      <Icon type="md-beer" color="#a9a9a9"/>
-                      <span style="padding: 5px;font-size: small">{{ vod.coinCount }}</span>
-                    </div>
-                    <div style="width: 50px">
-                      <Icon type="md-star" color="#a9a9a9"/>
-                      <span style="padding: 5px;font-size: small">{{ vod.collectCount }}</span>
-                    </div>
-                    <div style="width: 50px">
-                      <Icon type="ios-redo" color="#a9a9a9"/>
-                      <span style="padding: 5px;font-size: small">{{ vod.shareCount }}</span>
-                    </div>
-                  </div>
-                </div>
-                <div style="flex: 1;align-items: center;justify-content: end;display: flex">
-                  <div v-if="vod.status==='fail'">
-                    <Button icon="">申诉</Button>
-                    <Button icon="">删除</Button>
-                  </div>
-                  <div v-else-if="vod.status==='passed'">
-                    <Button icon="">编辑</Button>
-                    <Button icon="">数据</Button>
-                  </div>
-                </div>
+            <div style="padding-left: 5px;padding-right: 5px;color: #a5a5a5">
+              粉丝数
+              <div style="display: flex;align-items: center;justify-content: center">
+                {{ user.info.fansCount ? user.info.fansCount : 0 }}
+              </div>
+            </div>
+            <div style="padding-left: 5px;padding-right: 5px;color: #a5a5a5">
+              点赞数
+              <div style="display: flex;align-items: center;justify-content: center">
+                {{ user.info.likeCount ? user.info.likeCount : 0 }}
+              </div>
+            </div>
+            <div style="padding-left: 5px;padding-right: 5px;color: #a5a5a5">
+              播放数
+              <div style="display: flex;align-items: center;justify-content: center">
+                {{ user.info.viewCount ? user.info.viewCount : 0 }}
               </div>
             </div>
           </div>
-          <Page @on-change="change_page_no" @on-prev="change_page_no" @on-next="change_page_no"
-                @on-page-size-change="change_page_size"
-                :model-value="page.no" :page-size="page.size" style="bottom: 0" :total="page.total"
-                size="small"
-                show-elevator show-sizer/>
         </div>
+      </div>
+      <div class="data-panel">
+        <div v-show="active_tab==='主页'">
+          <p-main :uid="this.user.uid" @moreData="more_data"/>
+        </div>
+        <div v-show="active_tab==='稿件'" class="panel">
+          <p-vods :uid="this.user.uid"/>
+        </div>
+        <div v-show="active_tab==='收藏'" class="panel">
+          <p-collections :uid="this.user.uid"/>
+        </div>
+
+
       </div>
     </div>
   </div>
-
 </template>
 
 <style scoped lang="less">
@@ -199,19 +171,18 @@ export default {
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin-left: 20%;
-  margin-right: 20%;
+  margin-left: 5%;
+  margin-right: 5%;
   min-height: 100vh;
 }
 
 .info {
-  min-height: 120px;
-  height: 20%;
-  background: @theme-color;
+  height: 15vh;
+  background-image: url("@/assets/sphere_bg.jpeg");
   display: flex;
   flex-direction: row;
   color: white;
-  padding: 10px;
+  padding: 10px 20px;
   align-items: end;
 
   .avatar {
@@ -235,30 +206,11 @@ export default {
 
 }
 
-.vod-panel {
-  margin-top: 2%;
-  background: white;
-  padding: 10px;
+.data-panel {
+  margin-top: 1%;
   flex: 1;
-}
-
-.vod-card {
   display: flex;
   flex-direction: row;
-  padding: 15px 15px 15px 10px
-}
-
-.vod-title {
-  font-size: large;
-  line-height: 30px
-}
-
-.vod-card:hover {
-  cursor: pointer;
-
-  .vod-title {
-    color: @theme-color;
-  }
 }
 
 .follow-btn {
@@ -267,6 +219,83 @@ export default {
 
 .follow-btn:hover {
   cursor: pointer;
+}
+
+.tab-item {
+  padding: 0 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.tab-item:hover {
+  cursor: pointer;
+  color: @theme-color;
+}
+
+.tab-item:after {
+  bottom: 0;
+  content: "";
+  height: 3px;
+  width: 100%;
+  background: white;
+}
+
+.tab-item:hover:after {
+  bottom: 0;
+  content: "";
+  height: 3px;
+  width: 100%;
+  background: @theme-color;
+}
+
+.tab-item-active {
+  padding: 0 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  cursor: pointer;
+  color: @theme-color;
+}
+
+.tab-item-active:after {
+  bottom: 0;
+  content: "";
+  height: 3px;
+  width: 100%;
+  background: @theme-color;
+}
+
+.panel {
+  flex: 1;
+  display: flex;
+  width: 100%
+}
+
+/* Webkit 浏览器的滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px; /* 滚动条的宽度 */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* 滚动条轨道的背景颜色 */
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background: #888; /* 滚动条滑块的背景颜色 */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: @theme-color; /* 滚动条滑块在悬停时的背景颜色 */
+}
+
+
+* {
+  scrollbar-width: thin; /* 可选值有 'auto', 'thin', 'none' */
+  scrollbar-color: #888 @theme-color; /* 滑块颜色 和 轨道颜色 */
 }
 
 </style>
