@@ -26,10 +26,13 @@ export default defineComponent({
   content: '';
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 body {
   margin: 0;
   padding: 0;
+  min-height: 100vh;
+  display: flex;
 }
 </style>

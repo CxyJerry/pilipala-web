@@ -64,15 +64,6 @@ function pre_upload(mediainfo) {
 }
 
 function upload(cid) {
-    // let form = new FormData()
-    // form.append('video', file)
-    // form.append('cid', cid)
-    // return Api.post('/file/upload', form, {
-    //     onUploadProgress: e => {
-    //         console.log('enter progress event')
-    //         on_upload_callback(e)
-    //     }
-    // });
     return Api.get('/file/upload', {
         params: {
             cid: cid

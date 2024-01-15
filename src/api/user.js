@@ -77,6 +77,36 @@ function user_page(page_no, page_size) {
     })
 }
 
+function user_collection(uid, offset, size) {
+    return Api.get('/user/collections', {
+        params: {
+            uid: uid,
+            offset: offset,
+            size: size
+        }
+    })
+}
+
+function user_coin(uid, offset, size) {
+    return Api.get('/user/coins', {
+        params: {
+            uid: uid,
+            offset: offset,
+            size: size
+        }
+    })
+}
+
+function user_likes(uid, offset, size) {
+    return Api.get('/user/likes', {
+        params: {
+            uid: uid,
+            offset: offset,
+            size: size
+        }
+    })
+}
+
 export {
     login,
     email_login,
@@ -84,5 +114,8 @@ export {
     email_code,
     logout,
     user_info,
-    user_page
+    user_page,
+    user_collection,
+    user_coin,
+    user_likes
 }
