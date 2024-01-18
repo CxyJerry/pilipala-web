@@ -23,13 +23,29 @@ export default {
       },
       collections: [],
       coins: [],
-      likes: []
+      likes: [],
+      active_tab: '最新发布',
+      order_by_type: '投稿时间',
+      tabs: [
+        {
+          tab_name: '最新发布',
+          order_by: '投稿时间'
+        },
+        {
+          tab_name: '最多播放',
+          order_by: '播放量'
+        },
+        {
+          tab_name: '最多收藏',
+          order_by: '收藏数量'
+        }
+      ]
     }
   },
   methods: {
     request_vods() {
       this.loading = true
-      content_page(this.page.no, this.page.size, this.page.vod_type, this.uid)
+      content_page(this.page.no, this.page.size, this.page.vod_type, this.uid, this.order_by_type)
           .then(res => {
             this.loading = false
             this.page.data = res.data.page
@@ -99,6 +115,11 @@ export default {
     self() {
       let userInfo = store.state.user_info;
       return userInfo && userInfo.uid === this.uid
+    },
+    vod_sort_type_chang(tab) {
+      this.active_tab = tab.tab_name
+      this.order_by_type = tab.order_by
+      this.request_vods()
     }
   },
   watch: {
@@ -121,16 +142,17 @@ export default {
 </script>
 
 <template>
-  <div style="display: flex;flex-direction: row">
+  <div style="display: flex;flex-direction: row;width: 100%">
     <div style="display: flex;flex-direction: column;flex: 4;height: 100%;position: relative;background: white">
       <!--  我的视频  -->
       <div>
         <div style="padding: 10px;font-size: large;display: flex;width: 100%;align-items: center">
           <span>{{ self() ? '我' : 'TA ' }}的视频</span>
           <div style="flex: 1;font-size: small;flex-direction: row;display: flex">
-            <div class="tab-item">最新发布</div>
-            <div class="tab-item">最多播放</div>
-            <div class="tab-item">最新收藏</div>
+            <div :class="{'tab-item':tab.tab_name!==active_tab,'tab-item-active':tab.tab_name===active_tab}"
+                 @click="vod_sort_type_chang(tab)"
+                 v-for="tab in tabs">{{ tab.tab_name }}
+            </div>
           </div>
           <div style="font-size: x-small">
             <div class="more-btn" @click="more_data('稿件')">
@@ -395,6 +417,39 @@ export default {
 .tab-item:hover {
   cursor: pointer;
   color: @theme-color;
+}
+
+.tab-item-active {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: @theme-color;
+}
+
+.tab-item-active:hover {
+  cursor: pointer;
+}
+
+.tab-item-active:before {
+  position: relative;
+  content: "";
+  width: 0;
+  height: 0;
+  bottom: -85%;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid @theme-color;
+}
+
+.tab-item-active:after {
+  position: relative;
+  width: 100%;
+  height: 2px;
+  content: "";
+  bottom: -5%;
+  background: @theme-color;
 }
 
 .more-btn {

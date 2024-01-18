@@ -10,9 +10,10 @@ import PMain from "@/views/sphere/components/p-main.vue";
 import PSide from "@/views/sphere/components/p-side.vue";
 import PCollections from "@/views/sphere/components/p-collections.vue";
 import PVods from "@/views/sphere/components/p-vods.vue";
+import PDynamic from "@/views/sphere/components/p-dynamic.vue";
 
 export default {
-  components: {PVods, PCollections, PSide, PMain, FollowButton, Commonheader},
+  components: {PDynamic, PVods, PCollections, PSide, PMain, FollowButton, Commonheader},
   data() {
     return {
       user: {
@@ -77,7 +78,8 @@ export default {
         <!--  头像  -->
         <div class="avatar-img">
           <!--    实际头像    -->
-          <img :src="user.info.avatar" alt="" v-if="user.info&&user.info.avatar">
+          <img class="avatar" :src="`/api/${user.info.avatar}`" alt=""
+               v-if="user.info&&user.info.avatar">
           <!--    候补头像    -->
           <div
               style="display: flex;justify-content: center;align-items: center;background-color: white;border-radius: 9999px"
@@ -150,6 +152,9 @@ export default {
         <div v-show="active_tab==='主页'">
           <p-main :uid="this.user.uid" @moreData="more_data"/>
         </div>
+        <div v-show="active_tab==='动态'" class="panel">
+          <p-dynamic/>
+        </div>
         <div v-show="active_tab==='稿件'" class="panel">
           <p-vods :uid="this.user.uid"/>
         </div>
@@ -187,11 +192,10 @@ export default {
 
   .avatar {
     position: relative;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     border-radius: 360px;
     background: white;
-    margin-right: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -202,15 +206,19 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 64px;
+    width: 64px;
+    border: 2px solid white;
+    border-radius: 360px;
   }
 
 }
 
 .data-panel {
+  width: 100%;
   margin-top: 1%;
   flex: 1;
-  display: flex;
-  flex-direction: row;
+
 }
 
 .follow-btn {
@@ -291,7 +299,6 @@ export default {
 ::-webkit-scrollbar-thumb:hover {
   background: @theme-color; /* 滚动条滑块在悬停时的背景颜色 */
 }
-
 
 * {
   scrollbar-width: thin; /* 可选值有 'auto', 'thin', 'none' */

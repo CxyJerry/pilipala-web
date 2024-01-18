@@ -16,7 +16,18 @@ function idles() {
     })
 }
 
+function dynamics(uid, page_no, page_size) {
+    return Api.get('/fans/dynamic', {
+        params: {
+            uid: uid,
+            page_no: page_no,
+            page_size: page_size
+        }
+    })
+}
+
 export {
     follow,
-    idles
+    idles,
+    dynamics
 }

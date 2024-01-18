@@ -4,7 +4,15 @@ import {upload_cover} from "@/api/vod";
 export default {
   name: "p-cover-upload",
   props: {
-    cover_url: ''
+    cover_url: '',
+    text: {
+      type: String,
+      default: '上传封面'
+    },
+    fixed_number: {
+      type: Array,
+      default: () => [16, 9]
+    }
   },
   data() {
     return {
@@ -17,7 +25,6 @@ export default {
         can_scale: true,
         auto_crop: true,
         fixed: true,
-        fixed_number: [16, 9],
         fixed_box: true,
         can_move_box: true,
         can_move: true,
@@ -46,11 +53,18 @@ export default {
       })
     },
     upload() {
-      console.log('crop end,handle data starting ')
       this.$refs.cropper.getCropBlob(data => {
-        console.log(data)
         this.upload_cover(data)
       })
+    }
+  },
+  watch:{
+    cover_url: {
+      handler(val) {
+        console.log(val)
+        this._cover_url = val
+      },
+      immediate: true
     }
   }
 }
@@ -66,7 +80,7 @@ export default {
       <div class="cover-container">
         <div v-if="!_cover_url">
           <Icon type="ios-cloud-upload-outline" size="30" style="color: #00a1d6;"></Icon>
-          <p style="margin: 5px">上传封面</p>
+          <p style="margin: 5px">{{ text }}</p>
         </div>
         <div v-else>
           <img :src="`/api/${_cover_url}`" alt="" style="width: 154px;height: 96px"/>
@@ -91,7 +105,7 @@ export default {
             :can-scale="cropper.can_scale"
             :auto-crop="cropper.auto_crop"
             :fixed="cropper.fixed"
-            :fixed-number="cropper.fixed_number"
+            :fixed-number="fixed_number"
             :fixed-box="cropper.fixed_box"
             :can-move-box="cropper.can_move_box"
             :can-move="cropper.can_move"
