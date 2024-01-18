@@ -100,13 +100,14 @@ function post_vod(bvid, cid, form_data) {
     return Api.post('/vod/post', data)
 }
 
-function content_page(page_no, page_size, type, uid) {
+function content_page(page_no, page_size, type, uid, order_by) {
     return Api.get('/vod/content/page', {
         params: {
             uid: uid,
             page_no: page_no,
             page_size: page_size,
-            status: type
+            status: type,
+            order_by: order_by
         }
     })
 }

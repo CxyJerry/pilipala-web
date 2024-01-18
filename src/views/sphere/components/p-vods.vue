@@ -79,6 +79,7 @@ export default {
         </div>
       </div>
       <Page :total="total" size="small" show-total
+            :page-size="page_size"
             @on-change="change_page"
             @on-page-size-change=""
             @on-prev="change_page"

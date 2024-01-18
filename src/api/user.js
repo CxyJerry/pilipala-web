@@ -107,6 +107,15 @@ function user_likes(uid, offset, size) {
     })
 }
 
+function update_user_info(nickName, avatar, intro, announcement) {
+    return Api.put('/user/update', {
+        nickName: nickName,
+        avatar: avatar,
+        intro: intro,
+        announcement: announcement
+    })
+}
+
 export {
     login,
     email_login,
@@ -117,5 +126,6 @@ export {
     user_page,
     user_collection,
     user_coin,
-    user_likes
+    user_likes,
+    update_user_info
 }
