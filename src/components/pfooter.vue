@@ -1,6 +1,9 @@
 <script setup>
 
 import router from "@/router";
+import {ref} from "vue";
+
+const modal = ref({visible: true})
 </script>
 
 <template>
@@ -39,6 +42,15 @@ import router from "@/router";
       </div>
     </div>
   </div>
+  <Modal
+      v-model="modal.visible"
+      footer-hide="true"
+      title="加入星球,共同成长">
+    <div style="display: flex;justify-content: center;align-items: center;flex-direction: column">
+      PiliPala 视频弹幕网社区我们将迁移至程序员杰瑞的知识星球 - 【杰瑞的芝士圈】，欢迎大家加入我们的星球，共同成长。
+      <img style="width: 100%" src="@/assets/my-star.png" alt="杰瑞的芝士圈">
+    </div>
+  </Modal>
 </template>
 
 <style lang="less" scoped>
