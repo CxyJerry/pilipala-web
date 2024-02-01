@@ -48,6 +48,8 @@ export default {
       close_operation_timeout_id: 0,
       in_operation: false,
       pre_update_time_event_tick: new Date().getTime(),
+      event_source: null,
+      socket: null
     }
   },
   methods: {
@@ -58,14 +60,6 @@ export default {
       send_danmaku(store.state.user_info === null ? null : store.state.user_info.uid, digit_color, this.cur_vod.cid, danmaku.content, time, 0)
           .then(res => {
             this.$Message.success('已发送')
-            // this.danmaku.danmakus.push([
-            //       this.current_time,
-            //       0,
-            //       digit_color,
-            //       store.state.user_info.uid,
-            //       danmaku.content
-            //     ]
-            // )
           })
     },
     setup_realtime_sse() {
@@ -73,20 +67,30 @@ export default {
         return
       }
       let that = this
-      const event_source = new EventSource(`/api/danmaku/subscription/${this.cur_vod.cid}`)
-      event_source.onopen = function (e) {
-        console.log('建立连接')
-        console.log(e)
+      that.event_source = new EventSource(`/api/danmaku/subscription/${this.cur_vod.cid}?_=${new Date().getTime()}`, {withCredentials: true})
+      that.event_source.onopen = function (e) {
       }
-      event_source.onmessage = function (event) {
-        console.log(event.data)
+      this.event_source.onmessage = function (event) {
         let new_danmaku = JSON.parse(event.data)
         that.danmaku.danmakus.push(new_danmaku)
       }
 
-      event_source.onerror = function (e) {
+      that.event_source.onerror = function (e) {
+        // that.event_source.close()
+      }
+    },
+    setup_ws() {
+      // ws://localhost:8081/danmaku/1737828791809495040
+      let url = `ws://${location.host}/ws2/danmaku/1737828791809495040`;
+      this.socket = new WebSocket(url);
+      this.socket.onopen = (e) => {
+        console.log('ws 建立连接',e)
         console.log(e)
       }
+      this.socket.onmessage = (event) => {
+        console.log(event)
+      }
+
     },
     setup_on_play() {
       if (!this.player) {
@@ -167,6 +171,14 @@ export default {
         }
       })
 
+      this.player.on('error', (e) => {
+        console.log('播放器错误')
+      })
+
+      this.player.on('loadeddata', () => {
+        this.player.play()
+      })
+
       this.setup_time_update()
 
       this.setup_on_play()
@@ -222,6 +234,9 @@ export default {
   },
   mounted() {
     this.operation_bar_show()
+  },
+  unmounted() {
+    this.event_source.close()
   }
 }
 

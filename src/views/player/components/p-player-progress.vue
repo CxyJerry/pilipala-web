@@ -36,8 +36,12 @@ export default {
     buffered: {
       immediate: true,
       handler: function () {
-        let buffered_length = this.buffered.end(0) | 0
-        this.loaded.style.width = parseInt(((buffered_length / this.duration) * 10000).toString()) / 100 + '%'
+        try {
+          let buffered_length = this.buffered.end(0) | 0
+          this.loaded.style.width = parseInt(((buffered_length / this.duration) * 10000).toString()) / 100 + '%'
+        } catch (ignored) {
+        }
+
       }
     }
   },

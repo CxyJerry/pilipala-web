@@ -1,5 +1,5 @@
 <template>
-  <jump-button @click="$router.push('/message')">
+  <jump-button @click="handle_click">
     <svg t="1697402104703"
          class="icon"
          viewBox="0 0 1024 1024"
@@ -14,7 +14,7 @@
           p-id="2358"
       ></path>
     </svg>
-    <div class="notification-badge" v-if="unread_msg_count > 0">
+    <div class="notification-badge" v-if="has_login&&unread_msg_count > 0">
       {{ unread_msg_count }}
     </div>
   </jump-button>
@@ -40,6 +40,7 @@ export default {
   data() {
     return {
       unread_msg_count: 0,
+      has_login: false,
       page: {
         no: 1,
         size: 36,
@@ -59,15 +60,30 @@ export default {
         store.commit("set_unread_count", count);
       });
     },
+    handle_click() {
+      if (this.has_login) {
+        this.$router.push('/message');
+      } else {
+        store.commit('set_login_modal_visible', true)
+      }
+
+    },
   },
   mounted() {
     this.get_unread_msg_count();
+    console.log(this.$store.state.has_login)
   },
   watch: {
     "$store.state.unread_msg_count": {
       immediate: true,
       handler: function () {
         this.unread_msg_count = store.state.unread_msg_count;
+      },
+    },
+    "$store.state.has_login": {
+      immediate: true,
+      handler: function () {
+        this.has_login = store.state.has_login;
       },
     },
   },

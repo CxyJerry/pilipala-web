@@ -168,6 +168,15 @@ function review(cid, status) {
     })
 }
 
+function leave(cid) {
+    console.log('leave ', cid)
+    return Api.get('/vod/leave', {
+        params: {
+            cid: cid
+        }
+    })
+}
+
 export {
     pre_upload,
     upload,
@@ -182,5 +191,6 @@ export {
     interactive,
     interactive_info,
     sd_video,
-    review
+    review,
+    leave
 }
