@@ -2,10 +2,14 @@
 import {format_date} from "@/utils/unit";
 import {get_comment} from "@/api/comment";
 import {store} from "@/store";
+import router from "@/router";
 
 export default {
   name: "p-comment",
   methods: {
+    router() {
+      return router
+    },
     format_date,
     show_child() {
       if (this.loading) {
@@ -32,7 +36,7 @@ export default {
       }
       store.commit('set_reply_comment', comment_info)
     },
-    format_content(){
+    format_content() {
       let tempElement = document.createElement('div');
       tempElement.innerHTML = this.comment.content;
       return tempElement.innerHTML
@@ -63,7 +67,8 @@ export default {
     <!--  头像  -->
     <div class="avatar-img">
       <!--    实际头像    -->
-      <img :src="comment.author.avatar" alt="" v-if="comment.author&&comment.author.avatar">
+      <img style="width: 40px;aspect-ratio: 1/1;border-radius: 360px" :src="comment.author.avatar" alt=""
+           v-if="comment.author&&comment.author.avatar">
       <!--    候补头像    -->
       <div
           style="display: flex;justify-content: center;align-items: center;background-color: white;border-radius: 9999px"
@@ -77,7 +82,7 @@ export default {
       </div>
     </div>
     <div class="content">
-      <div class="nickname">
+      <div class="nickname" @click="$router.push(`/sphere/${comment.author.uid}`)">
         {{ comment.author.nickName }}
       </div>
       <div class="comment">
@@ -174,6 +179,10 @@ export default {
 .nickname {
   color: @theme-pink;
   margin-bottom: 3%;
+}
+
+.nickname:hover {
+  cursor: pointer;
 }
 
 .child-comment {

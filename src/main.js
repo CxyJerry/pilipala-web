@@ -6,7 +6,7 @@ import 'view-ui-plus/dist/styles/viewuiplus.css'
 import "quill-mention/dist/quill.mention.min.css";
 import {store} from "@/store";
 import VueCropper from 'vue-cropper';
-import 'vue-cropper/dist/index.css'
+import 'vue-cropper/dist/index.css';
 
 const app = createApp(App)
 app.use(router)

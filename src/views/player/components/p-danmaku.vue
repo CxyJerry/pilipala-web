@@ -20,7 +20,7 @@ export default {
   },
   data() {
     return {
-      wating: [],
+      waiting: [],
       running: [],
       running_danmaku_id_map: [],
       pre_draw_time: 0,
@@ -41,7 +41,7 @@ export default {
       for (let danmaku of this.running) {
         danmaku.style['animation'] = `danmaku ${speed}s linear 1`
       }
-      for (let danmaku of this.wating) {
+      for (let danmaku of this.waiting) {
         danmaku.style['animation'] = `danmaku ${speed}s linear 1`
       }
     },
@@ -56,10 +56,10 @@ export default {
       return ratio + '%'
     },
     update_waiting_danmakus(danmakus) {
-      this.wating = []
+      this.waiting = []
       for (let danmaku of danmakus) {
         let dan = this.build_danmaku(danmaku)
-        this.wating.push(dan)
+        this.waiting.push(dan)
       }
     },
     build_danmaku(danmaku) {
@@ -88,7 +88,7 @@ export default {
     video_current_play_time: {
       immediate: true,
       handler: function () {
-        for (let danmaku of this.wating) {
+        for (let danmaku of this.waiting) {
           // 将每条弹幕计算出一个唯一值，已经在滚动的就不需要再次加入滚动列表了
           const uni_obj = {
             time: danmaku.time,
@@ -98,7 +98,8 @@ export default {
             type: danmaku.type
           }
           let uni_id = JSON.stringify(uni_obj)
-          if (danmaku.time === this.video_current_play_time &&
+          let sub_res = (this.video_current_play_time - danmaku.time)
+          if (sub_res <= 2 && sub_res >= 0 &&
               !this.running_danmaku_id_map.includes(uni_id)) {
             danmaku.style['animation-play-state'] = this.stop ? 'paused' : 'running'
             this.running.push(danmaku)

@@ -145,9 +145,6 @@ const routes = [
             {
                 path: 'message-template',
                 name: 'message-template',
-                meta: {
-                    allow: true
-                },
                 component: () => import('../views/manage/views/message-template.vue')
             },
             {
@@ -184,9 +181,6 @@ const routes = [
     {
         path: '/message',
         name: 'message',
-        meta: {
-            allow: true
-        },
         component: () => import('@/views/message/message-center.vue')
     },
 ];

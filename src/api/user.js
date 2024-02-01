@@ -51,12 +51,11 @@ function email_code(email) {
 }
 
 function logout() {
-    Api.get('/user/logout').then(res => {
-        localStorage.clear()
-        store.commit('set_has_login', false)
-        Message.success({
-            content: '已登出'
-        })
+    Api.get('/user/logout')
+    localStorage.clear()
+    store.commit('set_has_login', false)
+    Message.success({
+        content: '已登出'
     })
 }
 

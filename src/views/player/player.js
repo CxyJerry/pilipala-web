@@ -1,10 +1,9 @@
-import {get_video, interactive, interactive_info} from "@/api/vod";
+import {get_video, interactive, interactive_info, leave} from "@/api/vod";
 import Commonheader from "@/components/commonheader.vue";
 import {dash} from "@/utils/player";
-import {convert_to_count_unit, double_time_format, format_date} from "../../utils/unit";
+import {convert_to_count_unit, double_time_format, format_date} from "@/utils/unit";
 import PlayerOperator from "@/views/player/player-operator.vue";
 import PButton from "@/components/p-button.vue";
-import Pfooter from "@/components/pfooter.vue";
 import PreviewVodCard from "@/views/player/components/preview-vod-card.vue";
 import FollowButton from "@/components/follow-button.vue";
 import {theme_color} from "@/style";
@@ -19,10 +18,9 @@ import HorizontalPreviewVideoCard from "@/components/horizontal-preview-video-ca
 export default {
     components: {
         HorizontalPreviewVideoCard,
-
         PCommentPanel,
         PVodLabel,
-        PPlayer, PDanmaku, FollowButton, PreviewVodCard, Pfooter, PButton, PlayerOperator, Commonheader
+        PPlayer, PDanmaku, FollowButton, PreviewVodCard, PButton, PlayerOperator, Commonheader
     },
 
     data() {
@@ -48,7 +46,6 @@ export default {
         };
     },
     methods: {
-        interactive,
         double_time_format,
         theme_color() {
             return theme_color
@@ -79,7 +76,9 @@ export default {
                     this.cur_vod.play_action_id = this.bvod.actionId
                     this.get_interactive_info()
                     this.request_commend()
-                })
+                }).catch(err => {
+                this.$Message.error('视频加载失败')
+            })
         },
         switch_vod(vod) {
             if (vod === this.cur_vod) {
@@ -121,10 +120,16 @@ export default {
         }
     },
     mounted() {
-        // 以下为隐藏一些作者的信息和视频播放源 如不需要可删除
-        // document.querySelector(".dplayer-menu").remove(); //隐藏右键菜单
-
+        window.addEventListener('beforeunload', ev => {
+            alert('设置卸载事件')
+            leave(this.cur_vod.cid)
+        })
         this.get_bvod()
     },
-
+    beforeUnmount() {
+        window.removeEventListener('beforeunload', ev => {
+            alert('close')
+            leave(this.cur_vod.cid)
+        })
+    },
 }

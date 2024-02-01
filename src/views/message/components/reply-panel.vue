@@ -32,27 +32,31 @@ export default {
             this.loading = false;
           });
     },
+    handle_scroll(e) {
+// 滚动到底部时加载更多
+      let scrollHeight = document.documentElement.scrollHeight;
+      let clientHeight = document.documentElement.clientHeight;
+      let scrollTop = document.documentElement.scrollTop;
+      if (scrollTop + clientHeight >= scrollHeight) {
+        if (this.loading || this.page.no >= Math.ceil(this.page.total / this.page.size)) {
+          return;
+        }
+        this.$Message.info('加载中...')
+        this.page.no += 1
+        this.request_messages()
+      }
+    },
     register_scroll_listener() {
       // 注册滚动事件
-      window.addEventListener('scroll', e => {
-        // 滚动到底部时加载更多
-        let scrollHeight = document.documentElement.scrollHeight;
-        let clientHeight = document.documentElement.clientHeight;
-        let scrollTop = document.documentElement.scrollTop;
-        if (scrollTop + clientHeight >= scrollHeight) {
-          if (this.loading || this.page.no >= Math.ceil(this.page.total / this.page.size)) {
-            return;
-          }
-          this.$Message.info('加载中...')
-          this.page.no += 1
-          this.request_messages()
-        }
-      });
+      window.addEventListener('scroll', this.handle_scroll);
     }
   },
   mounted() {
     this.register_scroll_listener()
     this.request_messages()
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handle_scroll)
   }
 }
 </script>

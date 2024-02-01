@@ -1,6 +1,7 @@
 <script>
 import PreviewPlayer from "@/components/preview-player.vue";
 import {convert_to_count_unit, double_time_format} from "../utils/unit";
+import {leave} from "@/api/vod";
 
 export default {
   components: {PreviewPlayer},

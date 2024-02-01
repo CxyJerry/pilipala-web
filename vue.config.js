@@ -21,9 +21,19 @@ module.exports = defineConfig({
             '/api': {
                 target: process.env.VUE_APP_BASE_URL,
                 changOrigin: true,
+                timeout: 60 * 1000,
+                ws: false,
                 pathRewrite: {
                     '^/api': ''
                 }
+            },
+            '/ws2': {
+                target: process.env.VUE_APP_BASE_WS_URL,
+                ws: true,
+                changOrigin: true,
+                pathRewrite: {
+                    '^/ws2': ''
+                },
             }
         },
         client: {

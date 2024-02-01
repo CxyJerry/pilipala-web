@@ -27,9 +27,9 @@ export default player
           <div
               style="display: flex;flex-direction: row;align-items: center;padding-left: 3px;padding-right: 3px">
             <Icon type="ios-list-box" color="rgba(204,204,204,0.89)"/>
-            <span style="color: rgba(204,204,204,0.89);margin-left: 3px;margin-right: 3px">{{
-                convert_to_count_unit(cur_vod.commentCount)
-              }}</span>
+            <span style="color: rgba(204,204,204,0.89);margin-left: 3px;margin-right: 3px">
+              {{ convert_to_count_unit(cur_vod.commentCount)}}
+            </span>
           </div>
           <!--     投稿时间     -->
           <div style="padding-left: 3px;padding-right: 3px">
@@ -54,7 +54,7 @@ export default player
       <div style="flex: 1;justify-content: end;display: flex;align-items: center">
         <div style="padding: 10px">
           <div v-if="author.avatar">
-            <img :src="author.avatar" alt=""
+            <img :src="`/api/${author.avatar}`" alt=""
                  style="width: 50px;height: 50px;border-radius: 9999px;border:1px solid #adadad"/>
           </div>
           <div v-else>
